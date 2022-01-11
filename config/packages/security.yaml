@@ -37,6 +37,8 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
          - { path: ^/index, roles: ROLE_USER }
+         - { path: ^/tweet-record, roles: ROLE_USER }
+         - { path: ^/tweet, roles: ROLE_USER }
 
 when@test:
     security:

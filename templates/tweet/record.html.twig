@@ -29,7 +29,7 @@
                          <tr>
                               <td>{{ data.id }}</td>
                               <td>{{ data.username }}</td>
-                              <td>{{ data.tweet }}</td>
+                              <td>{{ data.tweet | markdown }}</td>
                               <td>{{ data.created_at }}</td>
                               <td>
                                    <a href="/edit-tweet/{{ data.id }}" class="btn btn-primary">Edit</a>

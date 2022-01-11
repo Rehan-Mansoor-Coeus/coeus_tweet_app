@@ -5,6 +5,9 @@ namespace App\Entity;
 use App\Repository\TweetRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+
 /**
  * @ORM\Entity(repositoryClass=TweetRepository::class)
  */
@@ -26,6 +29,14 @@ class Tweet
      * @ORM\Column(type="text")
      */
     private $tweet;
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata)
+    {
+        $metadata->addPropertyConstraint(
+            'tweet',
+            new Assert\Length(['min' => 3])
+        );
+    }
 
     /**
      * @ORM\Column(type="date")
@@ -72,4 +83,6 @@ class Tweet
 
         return $this;
     }
+
+
 }

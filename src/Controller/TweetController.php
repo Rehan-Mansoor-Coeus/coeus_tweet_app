@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Tweet;
+use App\Form\TweetType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -17,23 +18,26 @@ class TweetController extends AbstractController
      */
     public function index(Request $request): Response
     {
+        $tweet = new Tweet();
+//        $form = $this->createFormBuilder()
+//            ->add('tweet', TextareaType::class)
+//            ->add('Post' , SubmitType::class , [
+//                'attr' => [
+//                    'class' => 'btn btn-success float-right'
+//                ]
+//            ])
+//            ->getForm();
 
-        $form = $this->createFormBuilder()
-            ->add('tweet', TextareaType::class)
-            ->add('Post' , SubmitType::class , [
-                'attr' => [
-                    'class' => 'btn btn-success float-right'
-                ]
-            ])
-            ->getForm();
+        $form = $this->createForm(TweetType::class , $tweet , [
+            'action' => $this->generateUrl('tweet')
+        ]);
+
 
         $form->handleRequest($request);
         if($form->isSubmitted()){
             $data = $form->getData();
 
-            $tweet = new Tweet();
-            $tweet->setUserId(1);
-            $tweet->settweet($data['tweet']);
+            $tweet->setUserId($this->getUser()->getId());
             $tweet->setCreatedAt(new \DateTime(date('Y-m-d')));
 
             $em = $this->getDoctrine()->getManager();
@@ -59,19 +63,34 @@ class TweetController extends AbstractController
 
         $em = $this->getDoctrine()->getManager();
         $conn = $em->getConnection();
-        $result= $conn->query('SELECT tweet.* , user.username FROM tweet LEFT JOIN user ON tweet.user_id = user.id')->fetchAll();
+        $result = $conn->query('SELECT tweet.* , user.username FROM tweet LEFT JOIN user ON tweet.user_id = user.id')->fetchAll();
 
          return $this->render('tweet/record.html.twig', [
                     'tweet' => $result
                 ]);
     }
+
+
+    /**
+     * @Route("/edit-tweet/{id}", name="edit-tweet")
+     */
+
+    public function edit(int $id): Response
+    {
+        dd($id);
+        $em = $this->getDoctrine()->getManager();
+        $tweet = $em->getRepository(Tweet::class)->find($id);
+        $em->flush();
+
+        return $this->render('tweet/index.html.twig', [
+            'form' => $tweet
+        ]);
+    }
+
     /**
      * @Route("/delete-tweet/{id}", name="delete-tweet")
      */
-
-    public function remove(int $id): Response
-    {
-
+    public function remove(int $id){
         $em = $this->getDoctrine()->getManager();
         $tweet = $em->getRepository(Tweet::class)->find($id);
         $em->remove($tweet);
@@ -80,21 +99,5 @@ class TweetController extends AbstractController
         $this->addFlash('success', 'Tweet has been Deleted!');
 
         return $this->redirectToRoute('tweet-record');
-    }
-
-    /**
-     * @Route("/edit-tweet/{id}", name="delete-tweet")
-     */
-
-    public function edit(int $id): Response
-    {
-
-        $em = $this->getDoctrine()->getManager();
-        $tweet = $em->getRepository(Tweet::class)->find($id);
-        $em->flush();
-
-        return $this->render('tweet/index.html.twig', [
-            'form' => $tweet
-        ]);
     }
 }
