@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Controller;
-
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,4 +27,20 @@ class IndexController extends AbstractController
             'controller_name' => 'IndexController',
         ]);
     }
+
+    /**
+     * @Route("/logger", name="logger")
+     */
+    public function logger(LoggerInterface $logger)
+    {
+        $logger->info('Info Logger');
+        $logger->error('An error occurred');
+        $logger->critical('Critical error found!', [
+            // include extra "context" info in your logs
+            'cause' => 'bad coding ..!',
+        ]);
+
+        return new Response('logger practice');
+    }
+
 }
