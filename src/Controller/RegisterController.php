@@ -17,7 +17,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class RegisterController extends AbstractController
 {
 
-
     /**
      * @Route("/register", name="register")
      */
@@ -58,4 +57,79 @@ class RegisterController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/users", name="users")
+     */
+
+    public function user(){
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->findAll();
+
+        return $this->render('register/record.html.twig', [
+            'user' => $user
+        ]);
+    }
+
+    /**
+     * @Route("/delete-user/{id}", name="delete-user")
+     */
+    public function remove(int $id){
+        $em = $this->getDoctrine()->getManager();
+        $user = $em->getRepository(User::class)->find($id);
+        $em->remove($user);
+        $em->flush();
+
+        $this->addFlash('success', 'User has been Deleted!');
+
+        return $this->redirectToRoute('users');
+    }
+
+
+    /**
+     * @Route("/user/create", name="user-create")
+     */
+    public function create(Request $request , UserPasswordEncoderInterface $passEncode)
+    {
+        $form = $this->createFormBuilder()
+            ->add('username')
+            ->add('password' ,RepeatedType::class , [
+                'type' => PasswordType::class,
+                'required' => true ,
+                'first_options' => ['label' => 'Password'] ,
+                'second_options' => ['label' => 'Confirm Password']
+            ])
+            ->add('Register' , SubmitType::class , [
+                'attr' => [
+                    'class' => 'btn btn-success float-right'
+                ]
+            ])
+            ->getForm();
+
+        $form->handleRequest($request);
+        if($form->isSubmitted()){
+            $data = $form->getData();
+
+            $user = new User();
+            $user->setUsername($data['username']);
+            $user->setPassword(
+                $passEncode->encodePassword($user , $data['password'])
+            );
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+            $this->addFlash('success', 'New Author has been Created!');
+            return $this->redirect($this->generateUrl('users'));
+        }
+
+
+        return $this->render('register/form.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+
+
+
+
 }

@@ -72,22 +72,6 @@ class TweetController extends AbstractController
 
 
     /**
-     * @Route("/edit-tweet/{id}", name="edit-tweet")
-     */
-
-    public function edit(int $id): Response
-    {
-        dd($id);
-        $em = $this->getDoctrine()->getManager();
-        $tweet = $em->getRepository(Tweet::class)->find($id);
-        $em->flush();
-
-        return $this->render('tweet/index.html.twig', [
-            'form' => $tweet
-        ]);
-    }
-
-    /**
      * @Route("/delete-tweet/{id}", name="delete-tweet")
      */
     public function remove(int $id){
@@ -99,5 +83,32 @@ class TweetController extends AbstractController
         $this->addFlash('success', 'Tweet has been Deleted!');
 
         return $this->redirectToRoute('tweet-record');
+    }
+
+
+    /**
+     * @Route("/tweet/edit/{id}", name="tweet-edit")
+     */
+    public function edit(Request $request , $id): Response
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $tweet = $em->getRepository(Tweet::class)->find($id);
+        $form = $this->createForm(TweetType::class , $tweet);
+
+
+        $form->handleRequest($request);
+        if($form->isSubmitted()){
+            $data = $form->getData();
+            $tweet->setUserId($this->getUser()->getId());
+            $em->flush();
+
+            $this->addFlash('success', 'Tweet has been Updated!');
+            return $this->redirect($this->generateUrl('tweet-record'));
+        }
+
+        return $this->render('tweet/edit.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 }

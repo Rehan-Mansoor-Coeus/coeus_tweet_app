@@ -1,17 +1,17 @@
 {% extends '/layout/base.html.twig' %}
 
-{% block title %}Tweet Record!{% endblock %}
+{% block title %}Create Tweet!{% endblock %}
 
 {% block body %}
      {% for message in app.flashes('success') %}
-          <div class="alert alert-danger">
+          <div class="alert alert-success">
                {{ message }}
           </div>
      {% endfor %}
      <div class="card">
           <div class="card-header">
-               <header>Tweet Records</header>
-               <a class="btn btn-warning float-right" href="/tweet">Create</a>
+               <header>Auther Records</header>
+               <a class="btn btn-warning float-right" href="/user/create">Create</a>
           </div>
           <div class="card-body">
                <table class="table table-bordered table-striped">
@@ -19,21 +19,18 @@
                     <tr class="bg-danger">
                          <th>ID</th>
                          <th>Author</th>
-                         <th>Post</th>
-                         <th>Date</th>
                          <th>Action</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for data in tweet %}
+                    {% for data in user %}
                          <tr>
                               <td>{{ data.id }}</td>
                               <td>{{ data.username }}</td>
-                              <td>{{ data.tweet | markdown }}</td>
-                              <td>{{ data.created_at }}</td>
+
                               <td>
-                                   <a href="tweet/edit/{{ data.id }}" class="btn btn-primary">Edit</a>
-                                   <a href="/delete-tweet/{{ data.id }}" class="btn btn-danger">Del</a>
+{#                                   <a href="/edit-user/{{ data.id }}" class="btn btn-primary">Edit</a>#}
+                                   <a href="/delete-user/{{ data.id }}" class="btn btn-danger">Del</a>
                               </td>
                          </tr>
                     {% endfor %}
