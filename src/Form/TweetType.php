@@ -18,10 +18,7 @@ class TweetType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('tweet',TextareaType::class , [
-                'required' => true,
-                'constraints' => [new Assert\Length(['min' => 3])],
-            ])
+            ->add('tweet',TextareaType::class)
             ->add('Post' , SubmitType::class , [
                  'attr' => [
                      'class' => 'btn btn-success float-right'

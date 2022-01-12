@@ -32,10 +32,11 @@ class Tweet
 
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
-        $metadata->addPropertyConstraint(
-            'tweet',
-            new Assert\Length(['min' => 3])
-        );
+
+        $metadata->addPropertyConstraint('tweet', new Assert\NotBlank([
+            'message' => 'Please Write Something',
+        ]));
+
     }
 
     /**

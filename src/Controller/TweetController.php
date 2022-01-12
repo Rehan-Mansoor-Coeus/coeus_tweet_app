@@ -19,14 +19,6 @@ class TweetController extends AbstractController
     public function index(Request $request): Response
     {
         $tweet = new Tweet();
-//        $form = $this->createFormBuilder()
-//            ->add('tweet', TextareaType::class)
-//            ->add('Post' , SubmitType::class , [
-//                'attr' => [
-//                    'class' => 'btn btn-success float-right'
-//                ]
-//            ])
-//            ->getForm();
 
         $form = $this->createForm(TweetType::class , $tweet , [
             'action' => $this->generateUrl('tweet')
@@ -34,7 +26,7 @@ class TweetController extends AbstractController
 
 
         $form->handleRequest($request);
-        if($form->isSubmitted()){
+        if($form->isSubmitted() && $form->isValid()){
             $data = $form->getData();
 
             $tweet->setUserId($this->getUser()->getId());
@@ -98,7 +90,7 @@ class TweetController extends AbstractController
 
 
         $form->handleRequest($request);
-        if($form->isSubmitted()){
+        if($form->isSubmitted() && $form->isValid()){
             $data = $form->getData();
             $tweet->setUserId($this->getUser()->getId());
             $em->flush();

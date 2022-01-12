@@ -1,8 +1,9 @@
-{% include('layout/header.html.twig') %}
-{% include('layout/sidebar.html.twig') %}
+{% extends '/layout/base.html.twig' %}
+
+{% block title %}Index!{% endblock %}
 
 
-
+{% block body %}
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
@@ -77,4 +78,4 @@
     </div>
     <!-- /.content-wrapper -->
 
-{% include('layout/footer.html.twig') %}
+{% endblock %}

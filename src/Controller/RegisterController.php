@@ -14,6 +14,9 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+
 class RegisterController extends AbstractController
 {
 
@@ -28,7 +31,11 @@ class RegisterController extends AbstractController
                 'type' => PasswordType::class,
                 'required' => true ,
                 'first_options' => ['label' => 'Password'] ,
-                'second_options' => ['label' => 'Confirm Password']
+                'second_options' => ['label' => 'Confirm Password'],
+                'constraints' => [new Assert\Length([
+                    'min' => 6,
+                    'max' => 8,
+                ])],
             ])
             ->add('Register' , SubmitType::class , [
                 'attr' => [
@@ -38,7 +45,7 @@ class RegisterController extends AbstractController
             ->getForm();
 
         $form->handleRequest($request);
-        if($form->isSubmitted()){
+        if($form->isSubmitted() && $form->isValid()){
             $data = $form->getData();
 
             $user = new User();
@@ -97,7 +104,11 @@ class RegisterController extends AbstractController
                 'type' => PasswordType::class,
                 'required' => true ,
                 'first_options' => ['label' => 'Password'] ,
-                'second_options' => ['label' => 'Confirm Password']
+                'second_options' => ['label' => 'Confirm Password'],
+                'constraints' => [new Assert\Length([
+                    'min' => 6,
+                    'max' => 8,
+                    ])]
             ])
             ->add('Register' , SubmitType::class , [
                 'attr' => [
@@ -107,7 +118,7 @@ class RegisterController extends AbstractController
             ->getForm();
 
         $form->handleRequest($request);
-        if($form->isSubmitted()){
+        if($form->isSubmitted() && $form->isValid()){
             $data = $form->getData();
 
             $user = new User();
