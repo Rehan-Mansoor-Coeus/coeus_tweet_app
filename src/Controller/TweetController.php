@@ -20,6 +20,7 @@ class TweetController extends AbstractController
     {
         $tweet = new Tweet();
 
+
         $form = $this->createForm(TweetType::class , $tweet , [
             'action' => $this->generateUrl('tweet')
         ]);
