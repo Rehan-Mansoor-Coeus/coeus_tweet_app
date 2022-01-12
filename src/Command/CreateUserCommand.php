@@ -57,4 +57,4 @@ class CreateUserCommand extends Command
     {
         return 'From Some Method';
     }
-}
+} 
