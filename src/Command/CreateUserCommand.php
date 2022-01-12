@@ -41,7 +41,7 @@ class CreateUserCommand extends Command
 
         // the value returned by someMethod() can be an iterator (https://secure.php.net/iterator)
         // that generates and returns the messages with the 'yield' PHP keyword
-        $output->writeln($this->show());
+        $output->writeln($this->showOutput());
 
         // outputs a message followed by a "\n"
         $output->writeln('Whoa!');
@@ -53,7 +53,7 @@ class CreateUserCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function show()
+    private function showOutput()
     {
         return 'From Some Method';
     }
