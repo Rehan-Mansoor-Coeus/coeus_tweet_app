@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Tweet;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -19,6 +20,9 @@ class TweetType extends AbstractType
     {
         $builder
             ->add('tweet',TextareaType::class)
+            ->add('image',FileType::class , [
+                'mapped' => false
+            ])
             ->add('Post' , SubmitType::class , [
                  'attr' => [
                      'class' => 'btn btn-success float-right'

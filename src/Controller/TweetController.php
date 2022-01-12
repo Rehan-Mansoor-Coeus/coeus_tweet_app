@@ -29,9 +29,15 @@ class TweetController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $data = $form->getData();
+            $file = $request->files->get('tweet')['image'];
+            $upload_directory = $this->getParameter('upload_directory');
+            $file_name = rand(100000,999999).'.'.$file->guessExtension();
+
+            $file->move($upload_directory,$file_name);
 
             $tweet->setUserId($this->getUser()->getId());
             $tweet->setCreatedAt(new \DateTime(date('Y-m-d')));
+            $tweet->setImage($file_name);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($tweet);
@@ -92,8 +98,18 @@ class TweetController extends AbstractController
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
+
             $data = $form->getData();
+
+            $file = $request->files->get('tweet')['image'];
+            $upload_directory = $this->getParameter('upload_directory');
+            $file_name = rand(100000,999999).'.'.$file->guessExtension();
+
+            $file->move($upload_directory,$file_name);
+
+            $tweet->setImage($file_name);
             $tweet->setUserId($this->getUser()->getId());
+
             $em->flush();
 
             $this->addFlash('success', 'Tweet has been Updated!');

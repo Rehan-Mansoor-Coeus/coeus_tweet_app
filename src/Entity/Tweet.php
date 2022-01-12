@@ -30,6 +30,12 @@ class Tweet
      */
     private $tweet;
 
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $image;
+
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
 
@@ -69,6 +75,18 @@ class Tweet
     public function setTweet(string $tweet): self
     {
         $this->tweet = $tweet;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setimage(string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }
