@@ -6,6 +6,7 @@
     "require": {
         "php": ">=7.2.5",
         "ext-ctype": "*",
+        "ext-http": "*",
         "ext-iconv": "*",
         "composer/package-versions-deprecated": "1.11.99.4",
         "doctrine/annotations": "^1.13",
@@ -25,6 +26,7 @@
         "symfony/framework-bundle": "5.4.*",
         "symfony/http-client": "5.4.*",
         "symfony/intl": "5.4.*",
+        "symfony/loco-translation-provider": "5.4.*",
         "symfony/mailer": "5.4.*",
         "symfony/maker-bundle": "^1.36",
         "symfony/mime": "5.4.*",

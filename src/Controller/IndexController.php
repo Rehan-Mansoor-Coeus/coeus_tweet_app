@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+use http\Env\Request;
 use Knp\Bundle\MarkdownBundle\MarkdownParserInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -8,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 use App\Acme\TestBundle\AcmeTestBundle;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class IndexController extends AbstractController
 {
@@ -70,6 +72,24 @@ class IndexController extends AbstractController
         return $this->render('index/markdown.html.twig', [
             'data' => $data ,
             'markdown' => $process_data ,
+        ]);
+
+    }
+    /**
+     * @Route("/translation", name="translation")
+     */
+    public function translation(TranslatorInterface $translator )
+    {
+
+        $translated = $translator->trans(
+            'Symfony is great',
+            [],
+            'messages',
+            'fr_FR'
+        );
+
+        return $this->render('index/translated.html.twig', [
+            'translated' => $translated ,
         ]);
 
     }

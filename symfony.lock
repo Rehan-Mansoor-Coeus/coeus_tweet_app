@@ -355,6 +355,15 @@
     "symfony/intl": {
         "version": "v5.4.2"
     },
+    "symfony/loco-translation-provider": {
+        "version": "5.4",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.3",
+            "ref": "c706da68af4ae956f45cffccf99a130e9484cb33"
+        }
+    },
     "symfony/mailer": {
         "version": "5.4",
         "recipe": {
