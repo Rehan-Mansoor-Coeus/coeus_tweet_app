@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\TweetRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+use Doctrine\ORM\Mapping\JoinColumn;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
 
@@ -21,9 +23,9 @@ class Tweet
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User" , inversedBy="tweet")
      */
-    private $user_id;
+    private $user;
 
     /**
      * @ORM\Column(type="text")
@@ -32,7 +34,7 @@ class Tweet
 
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text",nullable="true")
      */
     private $image;
 
@@ -55,17 +57,22 @@ class Tweet
         return $this->id;
     }
 
-    public function getUserId(): ?int
+    /**
+     * @return user
+     */
+    public function getUser()
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(int $user_id): self
+    /**
+     * @param user $user
+     */
+    public function setUser($user): void
     {
-        $this->user_id = $user_id;
-
-        return $this;
+        $this->user = $user;
     }
+
 
     public function getTweet(): ?string
     {
@@ -91,9 +98,9 @@ class Tweet
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): string
     {
-        return $this->created_at;
+        return $this->created_at->format('Y-m-d');
     }
 
     public function setCreatedAt(\DateTimeInterface $created_at): self

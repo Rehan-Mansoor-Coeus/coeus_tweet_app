@@ -21,7 +21,8 @@ class TweetType extends AbstractType
         $builder
             ->add('tweet',TextareaType::class)
             ->add('image',FileType::class , [
-                'mapped' => false
+                'mapped' => false,
+                'required' =>false
             ])
             ->add('Post' , SubmitType::class , [
                  'attr' => [

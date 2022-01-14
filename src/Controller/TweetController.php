@@ -29,15 +29,19 @@ class TweetController extends AbstractController
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
             $data = $form->getData();
-            $file = $request->files->get('tweet')['image'];
-            $upload_directory = $this->getParameter('upload_directory');
-            $file_name = rand(100000,999999).'.'.$file->guessExtension();
 
-            $file->move($upload_directory,$file_name);
+            if($request->files->get('tweet')['image']) {
+                $file = $request->files->get('tweet')['image'];
+                $upload_directory = $this->getParameter('upload_directory');
+                $file_name = rand(100000, 999999) . '.' . $file->guessExtension();
 
-            $tweet->setUserId($this->getUser()->getId());
+                $file->move($upload_directory, $file_name);
+                $tweet->setImage($file_name);
+            }
+
+            $tweet->setUser($this->getUser());
             $tweet->setCreatedAt(new \DateTime(date('Y-m-d')));
-            $tweet->setImage($file_name);
+
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($tweet);
@@ -61,8 +65,11 @@ class TweetController extends AbstractController
     {
 
         $em = $this->getDoctrine()->getManager();
-        $conn = $em->getConnection();
-        $result = $conn->query('SELECT tweet.* , user.username FROM tweet LEFT JOIN user ON tweet.user_id = user.id')->fetchAll();
+//        $conn = $em->getConnection();
+//        $result = $conn->query('SELECT tweet.* , user.username FROM tweet LEFT JOIN user ON tweet.user_id = user.id')->fetchAll();
+
+        $result = $em->getRepository(Tweet::class)->findAll();
+
 
          return $this->render('tweet/record.html.twig', [
                     'tweet' => $result
@@ -101,14 +108,17 @@ class TweetController extends AbstractController
 
             $data = $form->getData();
 
-            $file = $request->files->get('tweet')['image'];
-            $upload_directory = $this->getParameter('upload_directory');
-            $file_name = rand(100000,999999).'.'.$file->guessExtension();
+            if($request->files->get('tweet')['image']){
+                $file = $request->files->get('tweet')['image'];
+                $upload_directory = $this->getParameter('upload_directory');
+                $file_name = rand(100000,999999).'.'.$file->guessExtension();
 
-            $file->move($upload_directory,$file_name);
+                $file->move($upload_directory,$file_name);
 
-            $tweet->setImage($file_name);
-            $tweet->setUserId($this->getUser()->getId());
+                $tweet->setImage($file_name);
+            }
+
+            $tweet->setUser($this->getUser());
 
             $em->flush();
 
@@ -120,4 +130,6 @@ class TweetController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+
 }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -23,6 +25,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $id;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Tweet" , mappedBy="user")
+     */
+    protected $tweet;
+
+    /**
+     * @return mixed
+     */
+    public function getTweet()
+    {
+        return $this->tweet;
+    }
+
+    /**
+     * @param mixed $tweet
+     */
+    public function setTweet($tweet): void
+    {
+        $this->tweet = $tweet;
+    }
+
+    /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $username;
@@ -37,6 +60,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    public function __construct()
+    {
+        $this->tweet = new ArrayCollection();
+    }
 
 
 
@@ -122,5 +150,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function addTweet(Tweet $tweet): self
+    {
+        if (!$this->tweet->contains($tweet)) {
+            $this->tweet[] = $tweet;
+            $tweet->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTweet(Tweet $tweet): self
+    {
+        if ($this->tweet->removeElement($tweet)) {
+            // set the owning side to null (unless already changed)
+            if ($tweet->getUser() === $this) {
+                $tweet->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
