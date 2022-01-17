@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+use App\Entity\Tweet;
 use http\Env\Request;
 use Knp\Bundle\MarkdownBundle\MarkdownParserInterface;
 use Psr\Log\LoggerInterface;
@@ -13,11 +14,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class IndexController extends AbstractController
 {
+
+    private $security;
+
     /**
      * @Route("/index", name="index")
      */
     public function index(): Response
     {
+
         return $this->render('index/index.html.twig', [
             'controller_name' => 'IndexController',
         ]);
@@ -28,8 +33,11 @@ class IndexController extends AbstractController
      */
     public function home(): Response
     {
+        $em = $this->getDoctrine()->getManager();
+        $result = $em->getRepository(Tweet::class)->findAll();
+
         return $this->render('index/home.html.twig', [
-            'controller_name' => 'IndexController',
+            'result' => $result
         ]);
     }
 

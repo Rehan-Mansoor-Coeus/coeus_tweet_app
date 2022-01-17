@@ -18,7 +18,6 @@
                     <thead>
                     <tr class="bg-danger">
                          <th>ID</th>
-                         <th>Author</th>
                          <th>Post</th>
                          <th>Image</th>
                          <th>Date</th>
@@ -29,7 +28,6 @@
                     {% for data in tweet %}
                          <tr>
                               <td>{{ data.id }}</td>
-                              <td>{{ data.user.username }}</td>
                               <td>{{ data.tweet | markdown }}</td>
                               <td><a href="/uploads/{{ data.image }}" target="_blank"><img src="/uploads/{{ data.image }}" width="50px" alt="image"></a></td>
                               <td>{{ data.createdAt }}</td>

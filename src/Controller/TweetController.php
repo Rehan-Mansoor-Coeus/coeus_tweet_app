@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Tweet;
 use App\Form\TweetType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -61,28 +62,46 @@ class TweetController extends AbstractController
     /**
      * @Route("/tweet-record", name="tweet-record")
      */
-    public function record(Request $request): Response
+    public function record(): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $result = $em->getRepository(Tweet::class)->findAll();
+        $header = "Tweets Records";
+        return $this->render('tweet/record.html.twig', [
+            'tweet' => $result,
+            'header' => $header,
+        ]);
+    }
+
+
+
+    /**
+     * @Route("/tweet-record-user", name="tweet-record-user")
+     */
+    public function recordUser(): Response
     {
 
         $em = $this->getDoctrine()->getManager();
-//        $conn = $em->getConnection();
-//        $result = $conn->query('SELECT tweet.* , user.username FROM tweet LEFT JOIN user ON tweet.user_id = user.id')->fetchAll();
-
-        $result = $em->getRepository(Tweet::class)->findAll();
-
-
-         return $this->render('tweet/record.html.twig', [
-                    'tweet' => $result
-                ]);
+        $result = $em->getRepository(Tweet::class)->findBy([
+            'user' => $this->getUser()
+        ]);
+        $header = "My Tweets Records";
+        return $this->render('tweet/user-record.html.twig', [
+            'tweet' => $result,
+            'header' => $header,
+        ]);
     }
 
 
     /**
      * @Route("/delete-tweet/{id}", name="delete-tweet")
      */
-    public function remove(int $id){
+    public function remove(Tweet $tweet){
+
+        if ($tweet->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
         $em = $this->getDoctrine()->getManager();
-        $tweet = $em->getRepository(Tweet::class)->find($id);
         $em->remove($tweet);
         $em->flush();
 
@@ -95,17 +114,18 @@ class TweetController extends AbstractController
     /**
      * @Route("/tweet/edit/{id}", name="tweet-edit")
      */
-    public function edit(Request $request , $id): Response
+    public function edit(Tweet $tweet ,Request $request , $id): Response
     {
+        if ($tweet->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
 
-        $em = $this->getDoctrine()->getManager();
-        $tweet = $em->getRepository(Tweet::class)->find($id);
         $form = $this->createForm(TweetType::class , $tweet);
-
 
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid()){
 
+            $em = $this->getDoctrine()->getManager();
             $data = $form->getData();
 
             if($request->files->get('tweet')['image']){

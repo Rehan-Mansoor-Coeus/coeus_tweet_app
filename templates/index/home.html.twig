@@ -5,186 +5,50 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Twitter Clone - Final</title>
-    <link rel="stylesheet" href="/frontend/styles.css" />
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-            integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w=="
-            crossorigin="anonymous"
-    />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <style>
+        .card-img-top{
+            height: 300px;
+            width: 600px;
+        }
+    </style>
 </head>
 <body>
-<!-- sidebar starts -->
-<div class="sidebar">
-    <i class="fab fa-twitter"></i>
-    <div class="sidebarOption active">
-        <span class="material-icons"> home </span>
-        <h2>Home</h2>
-    </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Coeus Tweet App</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-    <div class="sidebarOption">
-        <span class="material-icons"> search </span>
-        <h2>Explore</h2>
-    </div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            </li>
 
-    <div class="sidebarOption">
-        <span class="material-icons"> notifications_none </span>
-        <h2>Notifications</h2>
-    </div>
-
-    <div class="sidebarOption">
-        <span class="material-icons"> mail_outline </span>
-        <h2>Messages</h2>
-    </div>
-
-    <div class="sidebarOption">
-        <span class="material-icons"> bookmark_border </span>
-        <h2>Bookmarks</h2>
-    </div>
-
-    <div class="sidebarOption">
-        <span class="material-icons"> list_alt </span>
-        <h2>Lists</h2>
-    </div>
-
-    <div class="sidebarOption">
-        <span class="material-icons"> perm_identity </span>
-        <h2>Profile</h2>
-    </div>
-
-    <div class="sidebarOption">
-        <span class="material-icons"> more_horiz </span>
-        <h2>More</h2>
-    </div>
-    <button class="sidebar__tweet">Tweet</button>
-</div>
-<!-- sidebar ends -->
-
-<!-- feed starts -->
-<div class="feed">
-    <div class="feed__header">
-        <h2>Home</h2>
-    </div>
-
-    <!-- tweetbox starts -->
-    <div class="tweetBox">
-        <form>
-            <div class="tweetbox__input">
-                <img
-                        src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png"
-                        alt=""
-                />
-                <input type="text" placeholder="What's happening?" />
-            </div>
-            <button class="tweetBox__tweetButton">Tweet</button>
+        </ul>
+        <form class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
     </div>
-    <!-- tweetbox ends -->
+</nav>
 
-    <!-- post starts -->
-    <div class="post">
-        <div class="post__avatar">
-            <img
-                    src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png"
-                    alt=""
-            />
-        </div>
+{#Posts#}
+{% for data in result %}
+<div class="card mb-3">
+    <img class="card-img-top" src="/uploads/{{ data.image }}" alt="Card image cap">
+    <div class="card-body">
+        <div class="card-title text-danger"><p>Author : {{ data.user.username }}</p></div>
+        <p class="card-text">{{ data.tweet }}</p>
+        <p class="card-text"><small class="text-muted">{{ data.createdAt|ago }}</small></p>
 
-        <div class="post__body">
-            <div class="post__header">
-                <div class="post__headerText">
-                    <h3>
-                        Somanath Goudar
-                        <span class="post__headerSpecial"
-                        ><span class="material-icons post__badge"> verified </span>@somanathg</span
-                        >
-                    </h3>
-                </div>
-                <div class="post__headerDescription">
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
-                </div>
-            </div>
-            <img
-                    src="https://www.focus2move.com/wp-content/uploads/2020/01/Tesla-Roadster-2020-1024-03.jpg"
-                    alt=""
-            />
-            <div class="post__footer">
-                <span class="material-icons"> repeat </span>
-                <span class="material-icons"> favorite_border </span>
-                <span class="material-icons"> publish </span>
-            </div>
-        </div>
-    </div>
-    <!-- post ends -->
-
-    <!-- post starts -->
-    <div class="post">
-        <div class="post__avatar">
-            <img
-                    src="https://i.pinimg.com/originals/a6/58/32/a65832155622ac173337874f02b218fb.png"
-                    alt=""
-            />
-        </div>
-
-        <div class="post__body">
-            <div class="post__header">
-                <div class="post__headerText">
-                    <h3>
-                        Somanath Goudar
-                        <span class="post__headerSpecial"
-                        ><span class="material-icons post__badge"> verified </span>@somanathg</span
-                        >
-                    </h3>
-                </div>
-                <div class="post__headerDescription">
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
-                </div>
-            </div>
-            <img
-                    src="https://www.focus2move.com/wp-content/uploads/2020/01/Tesla-Roadster-2020-1024-03.jpg"
-                    alt=""
-            />
-            <div class="post__footer">
-                <span class="material-icons"> repeat </span>
-                <span class="material-icons"> favorite_border </span>
-                <span class="material-icons"> publish </span>
-            </div>
-        </div>
-    </div>
-    <!-- post ends -->
-</div>
-<!-- feed ends -->
-
-<!-- widgets starts -->
-<div class="widgets">
-    <div class="widgets__input">
-        <span class="material-icons widgets__searchIcon"> search </span>
-        <input type="text" placeholder="Search Twitter" />
-    </div>
-
-    <div class="widgets__widgetContainer">
-        <h2>What's happening?</h2>
-        <blockquote class="twitter-tweet">
-            <p lang="en" dir="ltr">
-                Sunsets don&#39;t get much better than this one over
-                <a href="https://twitter.com/GrandTetonNPS?ref_src=twsrc%5Etfw">@GrandTetonNPS</a>.
-                <a href="https://twitter.com/hashtag/nature?src=hash&amp;ref_src=twsrc%5Etfw"
-                >#nature</a
-                >
-                <a href="https://twitter.com/hashtag/sunset?src=hash&amp;ref_src=twsrc%5Etfw"
-                >#sunset</a
-                >
-                <a href="http://t.co/YuKy2rcjyU">pic.twitter.com/YuKy2rcjyU</a>
-            </p>
-            &mdash; US Department of the Interior (@Interior)
-            <a href="https://twitter.com/Interior/status/463440424141459456?ref_src=twsrc%5Etfw"
-            >May 5, 2014</a
-            >
-        </blockquote>
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     </div>
 </div>
-<!-- widgets ends -->
+{% endfor %}
+
+
 </body>
 </html>
