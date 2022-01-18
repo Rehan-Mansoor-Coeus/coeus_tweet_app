@@ -48,7 +48,7 @@ class Tweet
     }
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="date" )
      */
     private $created_at;
 
@@ -108,6 +108,11 @@ class Tweet
         $this->created_at = $created_at;
 
         return $this;
+    }
+
+    public function isPrivate():bool
+    {
+        return false;
     }
 
 

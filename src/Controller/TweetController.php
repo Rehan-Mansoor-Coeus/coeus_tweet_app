@@ -4,13 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Tweet;
 use App\Form\TweetType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Security\Voter\TweetVoter;
 
 class TweetController extends AbstractController
 {
@@ -98,9 +98,8 @@ class TweetController extends AbstractController
      */
     public function remove(Tweet $tweet){
 
-        if ($tweet->getUser() !== $this->getUser()) {
-            throw $this->createAccessDeniedException();
-        }
+        $this->denyAccessUnlessGranted('DELETE', $tweet);
+
         $em = $this->getDoctrine()->getManager();
         $em->remove($tweet);
         $em->flush();
@@ -116,9 +115,8 @@ class TweetController extends AbstractController
      */
     public function edit(Tweet $tweet ,Request $request , $id): Response
     {
-        if ($tweet->getUser() !== $this->getUser()) {
-            throw $this->createAccessDeniedException();
-        }
+        $this->denyAccessUnlessGranted('EDIT', $tweet);
+
 
         $form = $this->createForm(TweetType::class , $tweet);
 

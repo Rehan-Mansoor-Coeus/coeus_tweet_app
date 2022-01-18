@@ -10,13 +10,12 @@ class TweetVoter extends Voter
 {
     protected function supports(string $attribute, $subject): bool
     {
-        // replace with your own logic
-        // https://symfony.com/doc/current/security/voters.html
-        return in_array($attribute, ['tweet-edit', 'POST_VIEW'])
+
+        return in_array($attribute, ['EDIT', 'DELETE'])
             && $subject instanceof \App\Entity\Tweet;
     }
 
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $tweet, TokenInterface $token): bool
     {
         $user = $token->getUser();
         // if the user is anonymous, do not grant access
@@ -24,14 +23,12 @@ class TweetVoter extends Voter
             return false;
         }
 
-        // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
-            case 'tweet-edit':
-                 return false;
+            case 'EDIT':
+                return $tweet->getUser()->getId() == $user->getId();
                 break;
-            case 'POST_VIEW':
-                // logic to determine if the user can VIEW
-                // return true or false
+            case 'DELETE':
+                return $tweet->getUser()->getId() == $user->getId();
                 break;
         }
 
