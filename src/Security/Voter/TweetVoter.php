@@ -24,12 +24,8 @@ class TweetVoter extends Voter
         }
 
         switch ($attribute) {
-            case 'EDIT':
-                return $tweet->getUser()->getId() == $user->getId();
-                break;
-            case 'DELETE':
-                return $tweet->getUser()->getId() == $user->getId();
-                break;
+            case 'DELETE' || 'EDIT':
+            return $tweet->getUser()->getId() == $user->getId();
         }
 
         return false;

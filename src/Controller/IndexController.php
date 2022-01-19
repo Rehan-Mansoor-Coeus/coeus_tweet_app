@@ -18,7 +18,9 @@ class IndexController extends AbstractController
     private $security;
 
     /**
-     * @Route("/index", name="index")
+     * @Route("/admin", name="index")
+     *
+     *
      */
     public function index(): Response
     {
@@ -29,7 +31,7 @@ class IndexController extends AbstractController
     }
 
     /**
-     * @Route("/", name="home")
+     * @Route("/home", name="home")
      */
     public function home(): Response
     {
