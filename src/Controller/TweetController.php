@@ -21,8 +21,6 @@ class TweetController extends AbstractController
     public function index(Request $request): Response
     {
         $tweet = new Tweet();
-
-
         $form = $this->createForm(TweetType::class , $tweet , [
             'action' => $this->generateUrl('tweet')
         ]);
